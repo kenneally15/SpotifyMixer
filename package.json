@@ -1,0 +1,22 @@
+{
+  "name": "spotify-genre-mixer",
+  "version": "1.0.0",
+  "description": "A web application that recommends songs based on a combination of two genres using Spotify's API",
+  "main": "app.js",
+  "scripts": {
+    "start": "live-server --port=5500 --no-browser",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "spotify",
+    "music",
+    "genres",
+    "recommendations"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "live-server": "^1.2.2"
+  }
+} 

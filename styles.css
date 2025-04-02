@@ -1,0 +1,179 @@
+:root {
+    --primary-color: #1DB954;
+    --background-color: #121212;
+    --surface-color: #282828;
+    --text-color: #FFFFFF;
+    --text-secondary: #B3B3B3;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+header p {
+    color: var(--text-secondary);
+}
+
+.genre-selector {
+    background-color: var(--surface-color);
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.genre-input {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+}
+
+input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #404040;
+    border-radius: 6px;
+    background-color: #404040;
+    color: var(--text-color);
+    font-size: 1rem;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+button {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #1ed760;
+}
+
+.loading {
+    text-align: center;
+    padding: 2rem;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #404040;
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.song-card {
+    background-color: var(--surface-color);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.song-image {
+    flex-shrink: 0;
+}
+
+.song-image img {
+    width: 200px;
+    height: 200px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.song-info {
+    flex-grow: 1;
+}
+
+.song-info h2 {
+    margin-bottom: 0.5rem;
+}
+
+.song-info p {
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.preview-controls {
+    margin: 1.5rem 0;
+}
+
+audio {
+    width: 100%;
+    height: 40px;
+}
+
+.spotify-button {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.spotify-button:hover {
+    background-color: #1ed760;
+}
+
+@media (max-width: 600px) {
+    .song-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .song-image img {
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+} 

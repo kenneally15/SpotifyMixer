@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Genre Mixer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Spotify Genre Mixer</h1>
+            <p>Discover songs that blend your favorite genres</p>
+        </header>
+
+        <main>
+            <div class="genre-selector">
+                <div class="genre-input">
+                    <label for="genre1">First Genre</label>
+                    <input type="text" id="genre1" placeholder="e.g., rock">
+                </div>
+                <div class="genre-input">
+                    <label for="genre2">Second Genre</label>
+                    <input type="text" id="genre2" placeholder="e.g., jazz">
+                </div>
+                <button id="findSongs">Find Songs</button>
+            </div>
+
+            <div class="results" id="results">
+                <div class="loading" id="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Finding the perfect blend...</p>
+                </div>
+                <div class="song-card" id="songCard" style="display: none;">
+                    <div class="song-image">
+                        <img id="albumArt" src="" alt="Album Art">
+                    </div>
+                    <div class="song-info">
+                        <h2 id="songTitle"></h2>
+                        <p id="artistName"></p>
+                        <p id="albumName"></p>
+                        <div class="preview-controls">
+                            <audio id="previewAudio" controls></audio>
+                        </div>
+                        <a id="spotifyLink" href="#" target="_blank" class="spotify-button">
+                            Listen on Spotify
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html> 

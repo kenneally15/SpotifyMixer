@@ -1,0 +1,5 @@
+const config = {
+    SPOTIFY_CLIENT_ID: 'a29889676a814323bb728ef914090605',
+    SPOTIFY_CLIENT_SECRET: 'ff8bd8dce7d5473a918a953868281955',
+    REDIRECT_URI: 'http://localhost:5500'
+}; 
