@@ -1,6 +1,6 @@
 # Spotify Genre Mixer
 
-A web application that recommends songs based on a combination of two genres using Spotify's API.
+A web application that recommends songs based on a combination of two music genres using Spotify's API.
 
 ## Setup Instructions
 
