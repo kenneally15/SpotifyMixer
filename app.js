@@ -125,7 +125,7 @@ async function handleFindSongs() {
         
         // Display custom message
         document.querySelector('#results').insertAdjacentHTML('beforeend', 
-            '<p class="fallback-message">Couldn\'t find a match, but I think you\'ll enjoy this instead!</p>');
+            '<p class="fallback-message">Couldn\'t find match, but enjoy this instead!</p>');
         
         // Display the fallback song
         displaySong(fallbackSong);
