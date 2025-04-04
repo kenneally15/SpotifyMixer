@@ -97,14 +97,16 @@ async function handleFindSongs() {
         return;
     }
 
-    if (genre1 === genre2) {
-        alert('Please select different genres');
-        return;
-    }
-
     showLoading(true);
     try {
-        const song = await findMatchingSong(genre1, genre2);
+        let song;
+        if (genre1 === genre2) {
+            // If both genres are the same, just get a song from that genre
+            song = await getSingleGenreSong(genre1);
+        } else {
+            // Otherwise, find a song that matches both genres
+            song = await findMatchingSong(genre1, genre2);
+        }
         displaySong(song);
     } catch (error) {
         console.error('Error finding song:', error);
@@ -218,6 +220,16 @@ function displaySong(song) {
 function showLoading(show) {
     loadingElement.style.display = show ? 'block' : 'none';
     songCard.style.display = show ? 'none' : 'flex';
+}
+
+// Get a random song from a single genre
+async function getSingleGenreSong(genre) {
+    const tracks = await getTracksByGenre(genre);
+    if (tracks.length === 0) {
+        throw new Error(`No tracks found for genre: ${genre}`);
+    }
+    // Return a random track from the genre
+    return tracks[Math.floor(Math.random() * tracks.length)];
 }
 
 // Initialize the application when the page loads
