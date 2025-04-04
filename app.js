@@ -108,7 +108,27 @@ async function handleFindSongs() {
         displaySong(song);
     } catch (error) {
         console.error('Error finding song:', error);
-        alert('Failed to find a matching song. Please try again.');
+        
+        // Create fallback song (Yellow Submarine by The Beatles)
+        const fallbackSong = {
+            name: "Yellow Submarine",
+            artists: [{ name: "The Beatles" }],
+            album: { 
+                name: "Revolver",
+                images: [{ url: "https://i.scdn.co/image/ab67616d0000b27328b8b9b46428896e6491e97a" }]
+            },
+            preview_url: "https://p.scdn.co/mp3-preview/b7e3b2ca6cf43dea151c6e61c6a93b7c46b4b5bd",
+            external_urls: {
+                spotify: "https://open.spotify.com/track/5wVVoYm3hIjRWeJF53mL5X"
+            }
+        };
+        
+        // Display custom message
+        document.querySelector('#results').insertAdjacentHTML('beforeend', 
+            '<p class="fallback-message">Couldn\'t find a match, but I think you\'ll enjoy this instead!</p>');
+        
+        // Display the fallback song
+        displaySong(fallbackSong);
     } finally {
         showLoading(false);
     }

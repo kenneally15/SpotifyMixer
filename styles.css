@@ -203,4 +203,11 @@ audio {
 .genre-dropdown option {
     background-color: #404040;
     color: var(--text-color);
+}
+
+.fallback-message {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--text-secondary);
+    font-style: italic;
 } 
