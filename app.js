@@ -3,6 +3,13 @@ const CLIENT_ID = config.SPOTIFY_CLIENT_ID;
 const CLIENT_SECRET = config.SPOTIFY_CLIENT_SECRET;
 const REDIRECT_URI = config.REDIRECT_URI;
 
+// Popular genres for dropdown options
+const POPULAR_GENRES = [
+    'rock', 'pop', 'hip hop', 'jazz', 'electronic', 
+    'classical', 'r&b', 'country', 'metal', 'indie', 
+    'folk', 'reggae', 'blues', 'soul', 'punk'
+];
+
 // DOM Elements
 const genre1Input = document.getElementById('genre1');
 const genre2Input = document.getElementById('genre2');
@@ -22,11 +29,33 @@ let accessToken = null;
 async function init() {
     try {
         await getAccessToken();
+        populateGenreDropdowns();
         setupEventListeners();
     } catch (error) {
         console.error('Initialization error:', error);
         alert('Failed to initialize the application. Please try again later.');
     }
+}
+
+// Populate genre dropdowns with options
+function populateGenreDropdowns() {
+    // Sort genres alphabetically
+    POPULAR_GENRES.sort();
+    
+    // Add options to both dropdowns
+    POPULAR_GENRES.forEach(genre => {
+        // Add to first dropdown
+        const option1 = document.createElement('option');
+        option1.value = genre;
+        option1.textContent = genre.charAt(0).toUpperCase() + genre.slice(1); // Capitalize first letter
+        genre1Input.appendChild(option1);
+        
+        // Add to second dropdown
+        const option2 = document.createElement('option');
+        option2.value = genre;
+        option2.textContent = genre.charAt(0).toUpperCase() + genre.slice(1); // Capitalize first letter
+        genre2Input.appendChild(option2);
+    });
 }
 
 // Get Spotify access token
@@ -64,12 +93,12 @@ async function handleFindSongs() {
     const genre2 = genre2Input.value.trim();
 
     if (!genre1 || !genre2) {
-        alert('Please enter both genres');
+        alert('Please select both genres');
         return;
     }
 
     if (genre1 === genre2) {
-        alert('Please enter different genres');
+        alert('Please select different genres');
         return;
     }
 
