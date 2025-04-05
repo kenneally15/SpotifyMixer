@@ -125,6 +125,10 @@ async function handleFindSongs() {
             }
         };
         
+        // Remove any existing fallback messages
+        const existingMessages = document.querySelectorAll('.fallback-message');
+        existingMessages.forEach(msg => msg.remove());
+        
         // Display custom message
         document.querySelector('#results').insertAdjacentHTML('beforeend', 
             '<p class="fallback-message">Couldn\'t find match, but enjoy this instead!</p>');
@@ -206,6 +210,10 @@ async function getTracksByArtists(artistIds) {
 
 // Display song information
 function displaySong(song) {
+    // Remove any existing fallback messages when showing a successful match
+    const existingMessages = document.querySelectorAll('.fallback-message');
+    existingMessages.forEach(msg => msg.remove());
+    
     albumArt.src = song.album.images[0].url;
     songTitle.textContent = song.name;
     artistName.textContent = song.artists[0].name;
