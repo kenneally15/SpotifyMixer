@@ -22,8 +22,12 @@ const artistName = document.getElementById('artistName');
 const albumName = document.getElementById('albumName');
 const previewAudio = document.getElementById('previewAudio');
 const spotifyLink = document.getElementById('spotifyLink');
+const spotifyPlayerContainer = document.getElementById('spotify-player');
 
 let accessToken = null;
+let player = null;
+let deviceId = null;
+let isAuthenticated = false;
 
 // Initialize the application
 async function init() {
@@ -31,9 +35,106 @@ async function init() {
         await getAccessToken();
         populateGenreDropdowns();
         setupEventListeners();
+        initSpotifyWebPlaybackSDK();
     } catch (error) {
         console.error('Initialization error:', error);
         alert('Failed to initialize the application. Please try again later.');
+    }
+}
+
+// Initialize Spotify Web Playback SDK
+function initSpotifyWebPlaybackSDK() {
+    window.onSpotifyWebPlaybackSDKReady = () => {
+        // Check if user has a premium account through a login flow
+        const hash = window.location.hash
+            .substring(1)
+            .split('&')
+            .reduce((initial, item) => {
+                if (item) {
+                    const parts = item.split('=');
+                    initial[parts[0]] = decodeURIComponent(parts[1]);
+                }
+                return initial;
+            }, {});
+            
+        window.location.hash = '';
+        let token = hash.access_token;
+        
+        if (token) {
+            isAuthenticated = true;
+            initPlayer(token);
+        } else {
+            // Show login button
+            const loginBtn = document.createElement('button');
+            loginBtn.textContent = 'Login to Spotify';
+            loginBtn.className = 'spotify-button login-button';
+            loginBtn.addEventListener('click', authenticateSpotify);
+            spotifyPlayerContainer.appendChild(loginBtn);
+        }
+    };
+}
+
+// Authenticate with Spotify
+function authenticateSpotify() {
+    const scopes = 'streaming user-read-email user-read-private';
+    window.location.href = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(window.location.origin + window.location.pathname)}&scope=${encodeURIComponent(scopes)}&response_type=token`;
+}
+
+// Initialize Spotify Player
+function initPlayer(token) {
+    player = new Spotify.Player({
+        name: 'Spotify Genre Mixer',
+        getOAuthToken: cb => { cb(token); }
+    });
+
+    // Error handling
+    player.addListener('initialization_error', ({ message }) => { console.error(message); });
+    player.addListener('authentication_error', ({ message }) => { 
+        console.error(message);
+        isAuthenticated = false;
+    });
+    player.addListener('account_error', ({ message }) => { console.error(message); });
+    player.addListener('playback_error', ({ message }) => { console.error(message); });
+
+    // Playback status updates
+    player.addListener('player_state_changed', state => { 
+        console.log(state);
+    });
+
+    // Ready
+    player.addListener('ready', ({ device_id }) => {
+        console.log('Ready with Device ID', device_id);
+        deviceId = device_id;
+    });
+
+    // Not Ready
+    player.addListener('not_ready', ({ device_id }) => {
+        console.log('Device ID has gone offline', device_id);
+        deviceId = null;
+    });
+
+    // Connect to the player
+    player.connect();
+}
+
+// Play a track on the Spotify player
+async function playTrack(uri) {
+    if (!isAuthenticated || !deviceId) {
+        console.log('Spotify player not ready or user not authenticated');
+        return;
+    }
+
+    try {
+        await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+            method: 'PUT',
+            body: JSON.stringify({ uris: [uri] }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            },
+        });
+    } catch (error) {
+        console.error('Error playing track:', error);
     }
 }
 
@@ -122,7 +223,8 @@ async function handleFindSongs() {
             preview_url: "https://p.scdn.co/mp3-preview/b7e3b2ca6cf43dea151c6e61c6a93b7c46b4b5bd",
             external_urls: {
                 spotify: "https://open.spotify.com/track/5wVVoYm3hIjRWeJF53mL5X"
-            }
+            },
+            uri: "spotify:track:5wVVoYm3hIjRWeJF53mL5X"
         };
         
         // Remove any existing fallback messages
@@ -220,6 +322,19 @@ function displaySong(song) {
     albumName.textContent = song.album.name;
     previewAudio.src = song.preview_url;
     spotifyLink.href = song.external_urls.spotify;
+    
+    // Update Spotify player if authenticated
+    if (isAuthenticated && deviceId) {
+        playTrack(song.uri);
+    } else if (!document.querySelector('.login-button')) {
+        // Show login button if not already present
+        const loginBtn = document.createElement('button');
+        loginBtn.textContent = 'Login to Spotify';
+        loginBtn.className = 'spotify-button login-button';
+        loginBtn.addEventListener('click', authenticateSpotify);
+        spotifyPlayerContainer.innerHTML = '';
+        spotifyPlayerContainer.appendChild(loginBtn);
+    }
 
     songCard.style.display = 'flex';
 }
